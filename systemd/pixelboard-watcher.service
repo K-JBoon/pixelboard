@@ -1,0 +1,10 @@
+[Unit]
+Description=Pixelboard Restarter
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart pixelboard.service
+
+[Install]
+WantedBy=multi-user.target

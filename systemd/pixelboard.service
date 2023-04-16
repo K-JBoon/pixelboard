@@ -1,0 +1,13 @@
+[Unit]
+Description=Pixelboard Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/app/pixelboard/
+ExecStart=/app/pixelboard/pixelboard
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
