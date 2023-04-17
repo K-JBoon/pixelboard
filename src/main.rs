@@ -30,8 +30,8 @@ fn main() -> Result<(), TaffyError> {
             width: points(96.0),
             height: points(48.0),
         },
-        grid_template_columns: vec![points(15.0), fr(1.0), points(15.0)],
-        grid_template_rows: vec![points(10.0), fr(1.0), points(10.0)],
+        grid_template_columns: vec![points(25.0), fr(1.0)],
+        grid_template_rows: vec![points(15.0), fr(1.0)],
         ..default()
     };
 
@@ -41,7 +41,7 @@ fn main() -> Result<(), TaffyError> {
         grid_column: span(3),
         ..default()
     })?;
-    let left_sidebar = taffy.new_leaf(Style {
+    let sidebar = taffy.new_leaf(Style {
         grid_row: line(2),
         grid_column: line(1),
         ..default()
@@ -51,41 +51,28 @@ fn main() -> Result<(), TaffyError> {
         grid_column: line(2),
         ..default()
     })?;
-    let right_sidebar = taffy.new_leaf(Style {
-        grid_row: line(2),
-        grid_column: line(3),
-        ..default()
-    })?;
-    let footer = taffy.new_leaf(Style {
-        grid_row: line(3),
-        grid_column: span(3),
-        ..default()
-    })?;
 
     // Create the container with the children
     let root = taffy.new_with_children(
         root_style,
-        &[header, left_sidebar, content_area, right_sidebar, footer],
+        &[header, sidebar, content_area],
     )?;
 
     // Setup the layout engine
     let mut layout_engine = LayoutEngine::new(taffy, root, 96, 48);
 
     // Setup the widgets
-    let red_block = SolidBlockWidget::new(Some((8, 30, 33)));
-    let blue_block = SolidBlockWidget::new(Some((11, 83, 81)));
-    let green_block = SolidBlockWidget::new(Some((78, 128, 152)));
-    let yellow_block = SolidBlockWidget::new(Some((78, 128, 152)));
-    let footer_bg_block = SolidBlockWidget::new(Some((8, 30, 33)));
-    let text_block = TextWidget::new("Kanderego? Nani koro!".to_string(), Some((144, 194, 231)));
+    let header_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((255, 0, 0)));
+    let sidebar_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((0, 255, 0)));
+    let content_area_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((255, 255, 0)));
+    let text_block = TextWidget::new("Pixelboard".to_string(), Some((255, 255, 255)));
 
     // Add widgets to the layout engine
-    layout_engine.add_widget_to_node(header, red_block);
-    layout_engine.add_widget_to_node(left_sidebar, yellow_block);
-    layout_engine.add_widget_to_node(content_area, blue_block);
-    layout_engine.add_widget_to_node(right_sidebar, green_block);
-    layout_engine.add_widget_to_node(footer, footer_bg_block);
-    layout_engine.add_widget_to_node(footer, text_block);
+    layout_engine.add_widget_to_node(header, header_block);
+    layout_engine.add_widget_to_node(header, text_block);
+
+    layout_engine.add_widget_to_node(sidebar, sidebar_block);
+    layout_engine.add_widget_to_node(content_area, content_area_block);
 
     // Check passed arguments
     let args: Vec<String> = std::env::args().collect();

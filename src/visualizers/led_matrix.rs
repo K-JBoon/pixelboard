@@ -20,11 +20,7 @@ impl Visualizer for LEDMatrixVisualizer {
             ..Default::default()
         };
 
-        let (mut matrix, mut canvas) = rpi_led_panel::RGBMatrix::new(config, 0).expect("Matrix initialization failed");
-
-        canvas.set_pixel(0, 0, 255, 0, 0);
-
-        matrix.update_on_vsync(canvas.clone());
+        let (matrix, canvas) = rpi_led_panel::RGBMatrix::new(config, 0).expect("Matrix initialization failed");
 
         Self {
             width,
@@ -45,6 +41,7 @@ impl Visualizer for LEDMatrixVisualizer {
             }
         }
 
+        self.canvas.set_brightness(50);
         self.canvas = self.hardware_matrix.update_on_vsync(self.canvas.clone());
     }
 }
