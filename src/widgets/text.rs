@@ -37,6 +37,8 @@ impl TextWidget {
             self.last_width = width;
             self.total_width = 0;
             self.tallest_character_height = 0;
+
+            // TODO: when updating text we can keep rasters around, add mechanic for this
             self.rasters.clear();
 
             for char in self.text.chars() {
@@ -59,6 +61,11 @@ impl TextWidget {
             self.rasterize_characters(width, height - 1);
         }
     }
+
+    pub fn update_text(&mut self, text: String) {
+        self.text = text;
+        self.rasterize_characters(self.last_width, self.last_height);
+    }
 }
 
 impl Widget for TextWidget {
@@ -72,6 +79,7 @@ impl Widget for TextWidget {
         // Horizontally center the text
         let mut col_offset = (width - self.total_width) / 2;
 
+        // How many cells each character should be removed from the bottom
         let target_bottom_offset = (height - self.tallest_character_height) / 2;
 
         for char in self.text.chars() {

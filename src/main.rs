@@ -31,7 +31,7 @@ fn main() -> Result<(), TaffyError> {
             height: points(48.0),
         },
         grid_template_columns: vec![points(25.0), fr(1.0)],
-        grid_template_rows: vec![points(15.0), fr(1.0)],
+        grid_template_rows: vec![points(25.0), fr(1.0)],
         ..default()
     };
 
@@ -63,15 +63,20 @@ fn main() -> Result<(), TaffyError> {
 
     // Setup the widgets
     let header_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((255, 0, 0)));
-    let sidebar_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((0, 255, 0)));
-    let content_area_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((255, 255, 0)));
     let text_block = TextWidget::new("Pixelboard".to_string(), Some((255, 255, 255)));
+
+    let sidebar_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((0, 255, 0)));
+    let clock_block = ClockWidget::new(Some((255, 255, 255)));
+
+    let content_area_block = SolidBlockWidget::new(Some((0, 0, 0)), Some((255, 255, 0)));
 
     // Add widgets to the layout engine
     layout_engine.add_widget_to_node(header, header_block);
     layout_engine.add_widget_to_node(header, text_block);
 
     layout_engine.add_widget_to_node(sidebar, sidebar_block);
+    layout_engine.add_widget_to_node(sidebar, clock_block);
+
     layout_engine.add_widget_to_node(content_area, content_area_block);
 
     // Check passed arguments
