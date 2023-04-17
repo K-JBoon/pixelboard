@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.24"
-chrono-tz = "0.8.2"
 fontdue = "0.7.2"
 rpi-led-panel = "0.3.0"
 taffy = { version = "0.3.11", features = ["grid"] }
