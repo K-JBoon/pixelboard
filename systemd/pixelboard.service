@@ -5,9 +5,11 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/app/pixelboard/
-ExecStart=/app/pixelboard/pixelboard
+ExecStart=/app/pixelboard/bin matrix
 User=root
 Group=root
+StandardOutput=null
+StandardError=null
 
 [Install]
 WantedBy=multi-user.target

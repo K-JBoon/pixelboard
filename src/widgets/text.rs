@@ -81,11 +81,21 @@ impl Widget for TextWidget {
                         let col = col_offset + x;
                         let row = row_offset + y;
 
-                        if col < matrix.width && row < matrix.height {
+                        if col > 0 && col < matrix.width && row > 0 && row < matrix.height {
                             let c0 = self.color.0 as f32 * (char_s / 255.0);
                             let c1 = self.color.1 as f32 * (char_s / 255.0);
                             let c2 = self.color.2 as f32 * (char_s / 255.0);
                             matrix[row][col] = Some((c0 as u8, c1 as u8, c2 as u8));
+                        } else if col > width {
+                            let wrapped_col = col_offset + x - width;
+
+                            if wrapped_col < matrix.width && row > 0 && row < matrix.height {
+                                let c0 = self.color.0 as f32 * (char_s / 255.0);
+                                let c1 = self.color.1 as f32 * (char_s / 255.0);
+                                let c2 = self.color.2 as f32 * (char_s / 255.0);
+                                matrix[row][wrapped_col] = Some((c0 as u8, c1 as u8, c2 as u8));
+
+                            }
                         }
                     }
                 }

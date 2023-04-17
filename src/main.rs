@@ -13,7 +13,8 @@ use crate::matrix::*;
 use crate::visualizers::*;
 use crate::widgets::*;
 
-const FPS: u32 = 24;
+// TODO: make this align with the LED matrix (also defaults to 120)
+const FPS: u32 = 120;
 
 fn default<T: Default>() -> T {
     Default::default()
@@ -86,24 +87,56 @@ fn main() -> Result<(), TaffyError> {
     layout_engine.add_widget_to_node(footer, footer_bg_block);
     layout_engine.add_widget_to_node(footer, text_block);
 
+    // Check passed arguments
+    let args: Vec<String> = std::env::args().collect();
+
+    let output_mode: String = match args.len() {
+        2 => {
+            args[1].parse().expect("Failed to parse argument")
+        },
+        _ => "terminal".to_owned()
+    };
+
     // Setup visualizer
-    let visualizer = TerminalVisualizer::new(96, 48);
+    if output_mode == "matrix".to_owned() {
+        let mut visualizer = LEDMatrixVisualizer::new(96, 48);
 
-    // Start render loop
-    let frame_duration = Duration::from_secs(1) / FPS;
-    let mut last_frame_time = Instant::now();
+        // Start render loop
+        let frame_duration = Duration::from_secs(1) / FPS;
+        let mut last_frame_time = Instant::now();
 
-    loop {
-        let elapsed_time = last_frame_time.elapsed();
+        loop {
+            let elapsed_time = last_frame_time.elapsed();
 
-        if elapsed_time < frame_duration {
-            std::thread::sleep(frame_duration - elapsed_time);
+            if elapsed_time < frame_duration {
+                std::thread::sleep(frame_duration - elapsed_time);
+            }
+
+            last_frame_time = Instant::now();
+
+            // Do rendering stuff
+            let matrix = layout_engine.render(elapsed_time);
+            visualizer.render(matrix);
         }
+    } else {
+        let mut visualizer = TerminalVisualizer::new(96, 48);
 
-        last_frame_time = Instant::now();
+        // Start render loop
+        let frame_duration = Duration::from_secs(1) / FPS;
+        let mut last_frame_time = Instant::now();
 
-        // Do rendering stuff
-        let matrix = layout_engine.render(elapsed_time);
-        visualizer.render(matrix);
+        loop {
+            let elapsed_time = last_frame_time.elapsed();
+
+            if elapsed_time < frame_duration {
+                std::thread::sleep(frame_duration - elapsed_time);
+            }
+
+            last_frame_time = Instant::now();
+
+            // Do rendering stuff
+            let matrix = layout_engine.render(elapsed_time);
+            visualizer.render(matrix);
+        }
     }
 }

@@ -13,7 +13,7 @@ impl SolidBlockWidget {
 }
 
 impl Widget for SolidBlockWidget {
-    fn render(&mut self, width: usize, height: usize, elapsed_time: Duration) -> RGBMatrix {
+    fn render(&mut self, width: usize, height: usize, _elapsed_time: Duration) -> RGBMatrix {
         // TODO: no need to reconstruct this matrix in a hot loop
         RGBMatrix {
             width,

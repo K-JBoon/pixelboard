@@ -12,7 +12,7 @@ impl Visualizer for TerminalVisualizer {
         Self { width, height }
     }
 
-    fn render(&self, matrix: RGBMatrix) {
+    fn render(&mut self, matrix: RGBMatrix) {
         let mut output = format!(
             "{}{}",
             termion::cursor::Goto(1, 1),
